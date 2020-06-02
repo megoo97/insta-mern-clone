@@ -10,12 +10,13 @@ router.get('/',requireLogin,(req,res)=>{
     res.send('hello');
 })
 
-router.get('/protected',(req,res)=>{
-    res.send('hello');
-})
+// router.get('/protected',requireLogin,(req,res)=>{
+//     res.send('hello');
+// })
 router.post('/signup',(req,res)=>{
     const {name,email,password} = req.body;
     if (!email || !password || !name) {
+        console.log(req);
         return res.status(422).json({error:"invalid arguments"})
     }
     user.findOne({email:email}).then((savedUser)=>{
