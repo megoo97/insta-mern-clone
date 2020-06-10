@@ -9,7 +9,7 @@ const postSchema =mongoose.Schema({
         required: true,
     }, photo: {
         type: String,
-        default: "no photo",
+        required: true,
     },  postedBy: {
         type: ObjectId,
         ref: "User",

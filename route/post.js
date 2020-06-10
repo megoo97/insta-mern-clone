@@ -5,14 +5,15 @@ const post = mongoose.model('Post');
 const requireLogin = require('../middleWare/requireLogin');
 
 router.post('/post',requireLogin,(req,res)=>{
-    const {title,body} = req.body;
-    if ( !title || !body) {
+    const {title,body,url} = req.body;
+    if ( !title || !body || !url) {
         return res.status(422).json({error :"please add all fileds"});
     }
     req.user.password = undefined;
-    const newPost = new post({ 
+    const newPost = new post({
         title,
         body,
+        photo:url,
         postedBy: req.user
     });
     newPost.save().then(result =>{
