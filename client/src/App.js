@@ -6,6 +6,7 @@ import  Profile from './components/screens/Profile';
 import  Signin from './components/screens/Signin';
 import  Signup from './components/screens/Signup';
 import  CreatePost from './components/screens/CreatePost';
+import  UserProfile from './components/screens/UserProfile';
 import {reducer,initialState} from './reducers/userReducers';
 import "./App.css";
 
@@ -40,6 +41,9 @@ const Routing = () => {
         </Route>
         <Route path="/create" exact> 
           <CreatePost />
+        </Route>
+        <Route path="/profile/:userId" exact> 
+          <UserProfile />
         </Route>
        </Switch>
   )
