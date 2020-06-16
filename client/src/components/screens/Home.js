@@ -1,7 +1,8 @@
-import React,{useState,useEffect} from 'react';
-
+import React,{useState,useEffect, useContext} from 'react';
+import {UserContext} from '../../App';
 const Home = () => {
   const [data,setData]=useState([])
+  const {state,dispatch} =useContext(UserContext);
   useEffect(() =>{
     fetch('/post',{
       method:"get",
@@ -15,6 +16,81 @@ const Home = () => {
       console.log(error);
     })
   },[])
+  const likePost= (id) => {
+    fetch('/post/like',{
+      method:"put",
+      headers:{
+          "Content-Type":"application/json",
+          "Authorization":"Bearer "+localStorage.getItem("jwt")
+      },
+      body:JSON.stringify({
+          postId:id
+      })
+  }).then(res=>res.json())
+  .then(result=>{
+
+    const newData = data.map(item=>{
+        if(item._id==result._id){
+            return result
+        }else{
+            return item
+        }
+    })
+    setData(newData)
+  }).catch(err=>{
+      console.log(err)
+  })
+  }
+  const unlikePost= (id) => {
+    fetch('/post/unlike',{
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        postId:id
+      })
+    }).then(res =>res.json()).then((result) => {
+      const newData = data.map(item =>{
+        if(item._id==result._id) {
+          return result;
+        } else {
+          return item;
+        }
+      })
+      setData(newData);
+    }).catch((error)=>{console.log(error)})
+  }
+  const clickLike= (post) => {
+    if(post.likes.includes(state._id)) {
+      unlikePost(post._id);
+    } else {
+      likePost(post._id);
+    }
+  }
+  const addComment= (text,postId) =>{
+    fetch('/post/comment',{
+      method:"put",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+localStorage.getItem("jwt")
+      },
+      body: JSON.stringify({
+        text,
+        postId
+      })
+    }).then(res =>res.json()).then((result) => {
+      const newData = data.map(item =>{
+        if(item._id==result._id) {
+          return result;
+        } else {
+          return item;
+        }
+      })
+      setData(newData);
+    }).catch((error)=>{console.log(error)})
+  }
   return (
     <div className="home" >
       {
@@ -26,10 +102,23 @@ const Home = () => {
               <img src={item.photo} />
             </div>
             <div className="card-content">
-            <i className="material-icons" style={{color:"red"}}>favorite</i>
+              <button style={{border:0,background:0,padding:0}}>{item.likes.includes(state._id)?<i className="material-icons" style={{color:"red"}} onClick={() => clickLike(item)}>favorite</i> :<i className="material-icons" style={{color:""}} onClick={() => clickLike(item)}>favorite_border</i> }</button>
+                <h6>{item.likes.length} likes</h6>
                 <h6>{item.title}</h6>
                 <p>{item.body}</p>
+                {
+                  item.comments.map(record =>{
+                    return(
+                    <h6><span style={{fontWeight:500}}>{record.postedBy.name}</span> {record.text}</h6>
+                    )
+                  })
+                }
+                <form onSubmit={(e) =>{ 
+                  e.preventDefault();
+                  addComment(e.target[0].value,item._id);
+                }}>
                 <input type="text" placeholder="add a comment"/>
+                </form>
             </div>
           </div>
           )
