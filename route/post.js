@@ -33,7 +33,8 @@ router.get('/post',requireLogin,(req,res)=>{
 });
 router.get('/user/followers/posts',requireLogin,(req,res)=>{
     post.find({postedBy:{$in:req.user.following}}).populate("postedBy","_id name").populate("comments.postedBy","_id name").
-    then(posts => {
+    sort('-createdAt')
+    .then(posts => {
         res.json({posts})
     }).catch(error => {
         console.log(error);

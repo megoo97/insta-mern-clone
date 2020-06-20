@@ -22,7 +22,9 @@ const userSchema =mongoose.Schema({
     profilePicture:{
         type:String,
         default:"https://img.icons8.com/carbon-copy/2x/name.png",
-    }
+    },
+    resetToken:String,
+    expireToken:Date,
 })
 
 mongoose.model('User',userSchema);

@@ -18,8 +18,9 @@ module.exports = (req,res,next)=>{
         User.findById(_id).then(userdata=>{
             req.user = userdata
             next()
-        })
-        
-        
+        }) 
     })
 }
+
+
+//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

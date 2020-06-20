@@ -23,7 +23,9 @@ margin-top: 30px;
   border-bottom: 1px solid #346bd3;
   box-shadow: 0 1px 0 0 #346bd3;
 }
-
+.collection-item {
+  width: 100%;
+}
 .input-field input[type=password]:focus {
   border-bottom: 1px solid #346bd3;
   box-shadow: 0 1px 0 0 #346bd3;
