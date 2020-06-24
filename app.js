@@ -20,6 +20,7 @@ require('./models/user');
 require('./models/post');
 app.use(require('./route/auth'));
 app.use(require('./route/post'));
+app.use(require('./route/user'));
 
 app.listen(port,()=>{
 console.log("server is running",port)
